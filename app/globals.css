@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --canvas: #0b0d0d;
+  --surface: #111414;
+  --surface-raised: #171b1a;
+  --line: #29302e;
+  --line-soft: #202523;
+  --muted: #84908b;
+  --text: #edf0ed;
+  --lime: #c6f45b;
+  --lime-dark: #759d28;
+  --amber: #f0b84b;
+  --red: #f17070;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--canvas); }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--text);
+  font-family: "Geist", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+::selection { background: #c6f45b; color: #101410; }
+
+.mono { font-family: "DM Mono", monospace; }
+.focus-ring:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
+}
+.grid-noise {
+  background-image: linear-gradient(var(--line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+  opacity: .35;
+  pointer-events: none;
+}
+.enter { animation: enter .55s ease-out both; }
+.enter-delay-1 { animation-delay: .1s; }
+.enter-delay-2 { animation-delay: .18s; }
+@keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-line { 0%, 100% { opacity: .35; transform: scaleX(.72); } 50% { opacity: 1; transform: scaleX(1); } }
+.running-line { animation: pulse-line 1.8s ease-in-out infinite; transform-origin: left; }
+@media (prefers-reduced-motion: reduce) {
+  .enter, .running-line { animation: none; }
+}
