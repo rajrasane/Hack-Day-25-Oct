@@ -1,0 +1,85 @@
+{
+  "workflow_id": "sre-cve-remediation-001",
+  "run_id": "run-1792911189",
+  "status": "AWAITING_KEPLER_VERIFICATION",
+  "test_command": "pytest service/tests/test_models.py",
+  "upgraded_manifest": "upgraded_requirements.txt",
+  "target_files_to_inspect": [
+    "service/models.py",
+    "service/app.py",
+    "service/tests/test_models.py"
+  ],
+  "gemma_advisory": {
+    "engine": "Gemma 4 Search-Grounded CVE Analysis",
+    "total_vulnerabilities": 4,
+    "vulnerabilities": [
+      {
+        "package": "pydantic",
+        "current_version": "1.10.12",
+        "target_version": "2.7.4",
+        "cve_id": "CVE-2024-37890",
+        "severity": "MEDIUM (CVSS 5.3)",
+        "description": "Regular expression denial of service (ReDoS) in email validation & v1 EOL maintenance."
+      },
+      {
+        "package": "requests",
+        "current_version": "2.28.1",
+        "target_version": "2.31.0",
+        "cve_id": "CVE-2023-32681",
+        "severity": "HIGH (CVSS 7.5)",
+        "description": "Unintended leakage of Proxy-Authorization header during cross-origin redirects."
+      },
+      {
+        "package": "fastapi",
+        "current_version": "0.95.2",
+        "target_version": "0.111.0",
+        "cve_id": "ADVISORY-FASTAPI-V2",
+        "severity": "HIGH (Compatibility)",
+        "description": "FastAPI <0.100.0 crashes when paired with Pydantic v2 runtime."
+      },
+      {
+        "package": "uvicorn",
+        "current_version": "0.22.0",
+        "target_version": "0.30.1",
+        "cve_id": "ADVISORY-UVICORN-WEBSOCKETS",
+        "severity": "LOW",
+        "description": "Performance and protocol compatibility updates."
+      }
+    ],
+    "breaking_changes_detected": [
+      {
+        "package": "pydantic",
+        "rule": "config_class_deprecated",
+        "pattern": "class Config:",
+        "fix": "model_config = ConfigDict(populate_by_name=True, json_schema_extra={...})",
+        "description": "Pydantic v2 replaces nested class Config with model_config = ConfigDict(...)"
+      },
+      {
+        "package": "pydantic",
+        "rule": "validator_decorator_deprecated",
+        "pattern": "@validator(...)",
+        "fix": "@field_validator(...)",
+        "description": "Use @field_validator instead of @validator and declare as @classmethod"
+      },
+      {
+        "package": "pydantic",
+        "rule": "dict_method_deprecated",
+        "pattern": ".dict()",
+        "fix": ".model_dump()",
+        "description": "Replace .dict() calls with .model_dump() for standard dictionary serialization"
+      }
+    ],
+    "upgraded_manifest": "upgraded_requirements.txt",
+    "action_required_in_kepler": [
+      "Execute test dry-run with upgraded_requirements.txt",
+      "Refactor Pydantic v1 class Config and validators into Pydantic v2 format",
+      "Verify all pytest cases pass before signaling human approval"
+    ]
+  },
+  "instructions_for_kepler": [
+    "1. Run dry-run test suite using pytest to detect Pydantic v1->v2 breakage.",
+    "2. Apply automated semantic refactoring to service/models.py (replace class Config with model_config = ConfigDict(...)).",
+    "3. Re-run pytest to verify all tests are green.",
+    "4. Emit Kepler verification signal back to Temporal."
+  ]
+}

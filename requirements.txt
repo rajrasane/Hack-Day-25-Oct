@@ -1,0 +1,7 @@
+# Sample Outdated / Vulnerable Requirements
+# Note: Pydantic v1.10.12 and older Requests/FastAPI with known advisories
+pydantic==1.10.12
+requests==2.28.1
+fastapi==0.95.2
+uvicorn==0.22.0
+pytest==8.2.0

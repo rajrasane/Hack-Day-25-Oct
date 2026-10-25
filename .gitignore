@@ -3,3 +3,8 @@ node_modules
 out
 .DS_Store
 *.log
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.temporal_state.json
+.kepler_sandbox/
