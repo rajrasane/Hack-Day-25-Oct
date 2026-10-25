@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from temporalio import activity, workflow
 from temporalio.client import Client
-from temporalio.worker import Worker
+from temporalio.worker import Worker, UnsandboxedWorkflowRunner
 
 from engine.gemma_analyzer import run_gemma_security_analysis
 
@@ -97,6 +97,7 @@ async def run_worker():
         task_queue="sre-remediation-task-queue",
         workflows=[DependencyRemediationWorkflow],
         activities=[analyze_dependencies_activity],
+        workflow_runner=UnsandboxedWorkflowRunner(),
     )
 
     print("[+] Temporal Worker is listening on queue: sre-remediation-task-queue")
